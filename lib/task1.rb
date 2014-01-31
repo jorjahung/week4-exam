@@ -12,4 +12,5 @@ class Array
 		end
 		memo
 	end
+
 end
