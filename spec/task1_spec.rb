@@ -1,25 +1,28 @@
 require './lib/task1'
 
 describe Array do
+	
+	let(:test_array) {(1..10).to_a}
+
 
 	it "should throw an error if block or sym is not given" do
-		expect { [1,2,3].fake_inject }.to raise_error
+		expect { test_array.fake_inject }.to raise_error
 	end
 
-	it "should return 45 because of the block" do
-		expect([5,6,7,8,9,10].fake_inject {|sum, n| sum + n} ).to eq(45)
+	it "should return 55 because of the block" do
+		expect(test_array.fake_inject {|sum, n| sum + n}).to eq(55)
 	end
 
 	it "should take an initial value" do
-		expect([1,2,3].fake_inject(1) {|sum, n| sum + n}).to eq(7)
+		expect(test_array.fake_inject(1) {|sum, n| sum + n}).to eq(56)
 	end
 
 	it "should allow symbols intead of block" do
-		expect([1,2,3].fake_inject(:+)).to eq(6)
+		expect(test_array.fake_inject(:-)).to eq(-53)
 	end
 
 	it "should take an initial value and sym" do
-		expect([4,5,6].fake_inject(1, :*)).to eq(120)
+		expect(test_array.fake_inject(2, :*)).to eq(7257600)
 	end
 
 end
