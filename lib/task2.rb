@@ -1,5 +1,11 @@
+require 'twilio-ruby'
+require 'time'
+
 class Takeaway
-	
+	account_sid = 'ACe6c81d48df21f8af97caad2e7f7b4f9a'
+	auth_token = 'c335c900163fb2da27b139fe89de544b'
+	@client = Twilio::REST::Client.new account_sid, auth_token
+
 	MENU = [
 		{ food: "Rice", price: 2.50 },
 		{ food: "Spring rolls", price: 3.50 },
@@ -8,25 +14,26 @@ class Takeaway
 		{ food: "Chicken curry", price: 5.50 }
 	]
 
+	TIME = (Time.now+1*60*60).strftime("%H:%M") 
+
+	message = @client.account.sms.messages.create(
+	  :from => '+441985250028',
+	  :to => '+447765645760',
+	  :body => "Thank you! Your order was placed and will be delivered before #{TIME}")
+
 	attr_accessor :order, :total
 	
 	def initialize
 		@order = []
 		@total = []
 	end
-	
-	# Not sure if I want to print the menu or not...
-	# def print_menu
-	# 	MENU.each do |item|
-	# 		puts "#{item[:food]} - #{item[:price]}"
-	# 	end
-	# end
 
-	def take_order(item, quantity, subtotal)
+	def place_order(item, quantity, subtotal)
 		raise "We do not have that item" if !correct_item?(item)
 		raise "Wrong subtotal given" if !correct_calculation?(item, quantity, subtotal)
 		order << item
-		total << quantity*subtotal
+		total << quantity*subtotal		
+		
 	end
 
 	def correct_calculation?(item, quantity, subtotal)
