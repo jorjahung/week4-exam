@@ -18,4 +18,9 @@ describe Takeaway do
 	it "should not raise error if the price given is incorrect" do
 		expect{my_order.take_order("Rice", 2, 4)}.to raise_error
 	end
+
+	it "should have the correct order" do
+		my_order.take_order("Rice", 2, 5)
+		expect(my_order.order).to eq(["Rice"])
+	end
 end
