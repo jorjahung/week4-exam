@@ -38,6 +38,11 @@ describe Takeaway do
 			expect(my_order.order).to eq(["2 Rice"])
 		end
 
+		it "should return the correct message for an order" do
+			my_order.place_order(["Rice"], [2], 5)
+      expect(my_order.message()).to eq "Thank you! You ordered:\n  2 rice \nYour total is 5.0. \nYour order will be delivered before 14:35."
+    end
+
 	  it "should send an SMS if calculation is correct" do
 	    my_order.should_receive(:sms).once
 	    my_order.place_order(["Rice"], [2], 5)
