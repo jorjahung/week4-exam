@@ -2,6 +2,10 @@ require './lib/task2'
 
 describe Takeaway do
 	let(:my_order) { Takeaway.new }
+
+	before (:each) do	
+		my_order.stub(:sms) 
+	end
 	
 	it "should not throw an error if ordering something on the menu" do
 		expect{my_order.place_order(["chicken curry"], [1], 5.50)}.to_not raise_error
@@ -28,5 +32,10 @@ describe Takeaway do
 		my_order.place_order(["Rice"], [2], 5)
 		expect(my_order.order).to eq(["2 Rice"])
 	end
+
+  it "should send an SMS if calculation is correct" do
+    my_order.should_receive(:sms).once
+    my_order.place_order(["Rice"], [2], 5)
+  end
 
 end

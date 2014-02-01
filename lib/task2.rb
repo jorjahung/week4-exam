@@ -27,16 +27,19 @@ class Takeaway
 	end
 
 	def sms
-		# @account_sid = 'ACe6c81d48df21f8af97caad2e7f7b4f9a'
-		# @auth_token = 'c335c900163fb2da27b139fe89de544b'
+		@account_sid = ENV['TWILIO_ACCOUNT_SID']
+		@auth_token = ENV['TWILIO_AUTH_TOKEN']
 
-		# @client = Twilio::REST::Client.new @account_sid, @auth_token
-		# @client.account.sms.messages.create(
-	 #  :from => '+441985250028',
-	 #  :to => '+447765645760',
-	 #  :body => "Thank you! You ordered:\n  #{order.join(", ").capitalize} \nYour total is #{correct_calculation}. \nYour order will be delivered before #{TIME}.")
+		@client = Twilio::REST::Client.new @account_sid, @auth_token
+		@client.account.sms.messages.create(
+	  :from => '+441985250028',
+	  :to => ENV['PHONE_NUMBER'],
+	  :body => message)
 	end
 
+	def message
+		"Thank you! You ordered:\n  #{order.join(", ").capitalize} \nYour total is #{correct_calculation}. \nYour order will be delivered before #{TIME}."
+	end
 
 	def check_calculation(client_calculation)
 		if client_calculation != correct_calculation
@@ -59,5 +62,4 @@ class Takeaway
 		end
 		order.flatten!
 	end
-
 end
