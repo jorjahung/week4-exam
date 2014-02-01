@@ -7,35 +7,41 @@ describe Takeaway do
 		my_order.stub(:sms) 
 	end
 	
-	it "should not throw an error if ordering something on the menu" do
-		expect{my_order.place_order(["chicken curry"], [1], 5.50)}.to_not raise_error
+	context "Menu checking" do
+		it "should not throw an error if ordering something on the menu" do
+			expect{my_order.place_order(["chicken curry"], [1], 5.50)}.to_not raise_error
+		end
+
+		it "should throw an error if ordering something not on the menu" do
+			expect{my_order.place_order(["banana"], [1], 1)}.to raise_error "We do not have banana"
+		end
 	end
 
-	it "should throw an error if ordering something not on the menu" do
-		expect{my_order.place_order(["banana"], [1], 1)}.to raise_error
+	context "Price checking" do
+		it "should be able to calculate the correct total" do
+			my_order.place_order(["Rice", "chicken curry"], [2, 1], 10.50)
+			expect(my_order.correct_calculation).to eq(10.50)
+		end
+
+		it "should not raise an error if the price given is correct" do
+			expect{my_order.place_order(["Rice", "chicken curry"], [2, 1], 10.50)}.to_not raise_error
+		end
+
+		it "should raise error if the price given is incorrect" do
+			expect{my_order.place_order(["Rice"], [2], 4)}.to raise_error
+		end
 	end
 
-	it "should be able to calculate the correct total" do
-		my_order.place_order(["Rice", "chicken curry"], [2, 1], 10.50)
-		expect(my_order.correct_calculation).to eq(10.50)
-	end
+	context "Placing orders" do
+		it "should have the correct order" do
+			my_order.place_order(["Rice"], [2], 5)
+			expect(my_order.order).to eq(["2 Rice"])
+		end
 
-	it "should not raise an error if the price given is correct" do
-		expect{my_order.place_order(["Rice", "chicken curry"], [2, 1], 10.50)}.to_not raise_error
+	  it "should send an SMS if calculation is correct" do
+	    my_order.should_receive(:sms).once
+	    my_order.place_order(["Rice"], [2], 5)
+	  end
 	end
-
-	it "should raise error if the price given is incorrect" do
-		expect{my_order.place_order(["Rice"], [2], 4)}.to raise_error
-	end
-
-	it "should have the correct order" do
-		my_order.place_order(["Rice"], [2], 5)
-		expect(my_order.order).to eq(["2 Rice"])
-	end
-
-  it "should send an SMS if calculation is correct" do
-    my_order.should_receive(:sms).once
-    my_order.place_order(["Rice"], [2], 5)
-  end
 
 end

@@ -32,7 +32,7 @@ class Takeaway
 
 		@client = Twilio::REST::Client.new @account_sid, @auth_token
 		@client.account.sms.messages.create(
-	  :from => '+441985250028',
+	  :from => ENV['TWILIO_PHONE_NUMBER'],
 	  :to => ENV['PHONE_NUMBER'],
 	  :body => message)
 	end
